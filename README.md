@@ -2,6 +2,19 @@
 
 A working prototype for Lena at Juniper Salon. When a last-minute cancellation opens a slot, staff add the opening, and the app works through the waitlist **one client at a time**. Staff approve each text before it goes out, each client gets **15 minutes** to reply, and the process stops **30 minutes before the appointment**. It replaces the spreadsheet-and-texting routine and keeps a clear record of who was contacted, who declined and what happened.
 
+## Run it (one command)
+
+With Node.js 20+ installed and Docker Desktop running, from the repository folder:
+
+```bash
+npm install && npm run dev
+```
+
+Then open the app at <http://localhost:3000> and the Temporal Web UI at <http://localhost:8233>. Press Ctrl+C to stop, and `npm run stop` to shut down Temporal.
+
+- **Presentation for Lena:** [`presentation/Juniper-Salon-Openings.pdf`](presentation/Juniper-Salon-Openings.pdf) (5 slides)
+- **Temporal Web UI evidence:** [`evidence/temporal-ui-workflow.png`](evidence/temporal-ui-workflow.png)
+
 ## What Lena asked for → how it works
 
 | Lena’s need | In the prototype |
@@ -31,17 +44,7 @@ A working prototype for Lena at Juniper Salon. When a last-minute cancellation o
 - **Activities with retry policies** handle the outside world: sending texts (simulated; invalid numbers are non-retryable, carrier errors retry with backoff), Square bookings (simulated; the booking ID is derived from the slot and client so retries never double-book), and waitlist changes.
 - **Event history** is the audit trail Lena was missing. Every offer, timeout, decline and retry is visible in the Temporal UI.
 
-## Run it
-
-Requirements: Node.js 20+ and Docker Desktop (running).
-
-```bash
-npm install
-npm run dev
-```
-
-- App: <http://localhost:3000>
-- Temporal UI: <http://localhost:8233>
+## Other commands
 
 ```bash
 npm test          # 7 Workflow tests with a time-skipping test server (no Docker needed)
@@ -82,4 +85,5 @@ Use **Restore the sample waitlist** (Waitlist tab) to rehearse again.
 - `src/types.ts`: shared data types
 - `public/`: phone-friendly staff screen and simulated client texts
 - `tests/`: Workflow tests (timeout, unreachable, late reply, one active offer, walk-in, cutoff, validation)
-- `evidence/`: Temporal UI screenshot for submission
+- `evidence/`: Temporal Web UI screenshot of a representative opening Workflow
+- `presentation/`: 5-slide PDF for Lena (problem, how it works, what's simulated, next step)
